@@ -185,20 +185,15 @@ public class MySqlDBAccessor implements DBAccessor {
         return record;        
     }
 
-    @Override
-    public boolean insertRecord(String tableName, List colDescriptors, List colValues, boolean closeConnection) throws SQLException, Exception {
-        return true;
-    }
-
-    @Override
-    public int updateRecords(String tableName, List colDescriptors, List colValues, String whereField, Object whereValue, boolean closeConnection) throws SQLException, Exception {
-        return 0;
-    }
-
-    @Override
-    public int deleteRecords(String tableName, String whereField, Object whereValue, boolean closeConnection) throws SQLException, Exception {
-        return 0;
-    }
+//    @Override
+//    public boolean insertRecord(String tableName, List colDescriptors, List colValues, boolean closeConnection) throws SQLException, Exception {
+//    }
+//    @Override
+//    public int updateRecords(String tableName, List colDescriptors, List colValues, String whereField, Object whereValue, boolean closeConnection) throws SQLException, Exception {
+//    }
+//    @Override
+//    public int deleteRecords(String tableName, String whereField, Object whereValue, boolean closeConnection) throws SQLException, Exception {
+//    }
     
     public Connection getConnection() {
         return connection;
