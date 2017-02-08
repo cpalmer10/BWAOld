@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 public class AuthorController extends HttpServlet {
     
     private static final String ERR_MSG = "No parameter detected";
-    private static final String LIST_PAGE = "/listAuthors.jsp";
+    private static final String LIST_PAGE = "/authorList.jsp";
     private static final String LIST_ACTION = "list";
     private static final String ACTION_PARAM = "action";
 

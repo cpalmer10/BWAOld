@@ -6,16 +6,17 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Author List</title>
     </head>
-    <body>
+    <body>        
         <h1>Author List</h1>
-        <table>
-            <tr>
+        <table width="500" border="1" cellspacing="0" cellpadding="4" style="tr:nth-of-type(odd){background-color:#ccfff}">
+            <tr style="background-color: black; color: white;">
                 <th align="left">ID</th>
                 <th align="left">Author Name</th>
                 <th align="left">Date Added</th>               
@@ -27,11 +28,10 @@
                 <td align="left"><c:out value="${a.authorName}"/></td>
                 <td align="right">
                     <fmt:formatDate pattern="M/d/yyyy" value="${a.dateAdded}"></fmt:formatDate>
-                </td>                                
+                </td>                
             </tr>            
         </c:forEach>                        
         </table>
         <br><a href="index.jsp">Back to Home</a>
-        
     </body>
 </html>
