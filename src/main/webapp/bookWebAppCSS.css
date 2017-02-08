@@ -8,8 +8,12 @@ and open the template in the editor.
     Author     : Chris
 */
 
+html,body {
+    font-family: "Arial", sans-serif;
+}
+
 tr:nth-of-type(odd){
-    background-color: lightskyblue;
+    background-color: lightskyblue;  
 }
 
 #tableHeaders {
@@ -19,5 +23,4 @@ tr:nth-of-type(odd){
 
 #pageHeader {
     font-weight: bold;
-    font-family: "Times New Roman", sans-serif;
 }
