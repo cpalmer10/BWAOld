@@ -8,10 +8,13 @@ and open the template in the editor.
     Author     : Chris
 */
 
-html,body {
+html,body {    
     font-family: "Arial", sans-serif;
 }
 
+tr:nth-of-type(even){
+    background-color: whitesmoke;
+}
 tr:nth-of-type(odd){
     background-color: lightskyblue;  
 }
