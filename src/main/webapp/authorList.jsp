@@ -15,7 +15,7 @@
     </head>
     <body>        
         <h1>Author List</h1>
-        <table width="500" border="1" cellspacing="0" cellpadding="4" style="tr:nth-of-type(odd){background-color:#ccfff;}">
+        <table width="500" border="1" cellspacing="0" cellpadding="4" style="tr:nth-of-type(odd){background-color:#ccffff;}">
             <tr style="background-color: black; color: white;">
                 <th align="left">ID</th>
                 <th align="left">Author Name</th>
