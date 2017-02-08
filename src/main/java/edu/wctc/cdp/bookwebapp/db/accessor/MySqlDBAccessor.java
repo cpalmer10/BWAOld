@@ -8,15 +8,19 @@ package edu.wctc.cdp.bookwebapp.db.accessor;
 import edu.wctc.cdp.bookwebapp.constants.ExceptionConstants;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  *
@@ -28,6 +32,7 @@ public class MySqlDBAccessor implements DBAccessor {
     private Statement statement;
     private ResultSet resultSet;
     private ResultSetMetaData metaData;
+    private PreparedStatement prepStatement;
     
     public MySqlDBAccessor() {
     }
@@ -185,38 +190,168 @@ public class MySqlDBAccessor implements DBAccessor {
         return record;        
     }
 
-//    @Override
-//    public boolean insertRecord(String tableName, List colDescriptors, List colValues, boolean closeConnection) throws SQLException, Exception {
-//    }
-//    @Override
-//    public int updateRecords(String tableName, List colDescriptors, List colValues, String whereField, Object whereValue, boolean closeConnection) throws SQLException, Exception {
-//    }
-//    @Override
-//    public int deleteRecords(String tableName, String whereField, Object whereValue, boolean closeConnection) throws SQLException, Exception {
-//    }
+    @Override
+    public boolean insertRecord(String tableName, List columnNames, List columnValues, boolean closeConnection) throws SQLException, Exception {
+        prepStatement = null;
+        int recordsUpdated = 0;
+        
+        try {
+            prepStatement = buildInsertStatement(connection, tableName, columnNames);
+            
+            final Iterator i = columnValues.iterator();
+            int index = 1;
+            
+            while(i.hasNext()) {
+                final Object object = i.next();
+                prepStatement.setObject(index++, object);                
+            }
+            recordsUpdated = prepStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw e;
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            try {
+                prepStatement.close();
+                if (closeConnection) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw e;
+            }
+        }
+        
+        if (recordsUpdated == 1) {
+            return true;
+        } else {
+            return false;
+        }                        
+    }
     
-    public Connection getConnection() {
-        return connection;
+    @Override
+    public int updateRecords(String tableName, List columnNames, List columnValues, String whereField, Object whereValue, boolean closeConnection) throws SQLException, Exception {
+        prepStatement = null;
+        int recordsUpdated = 0;
+        
+        try {
+            prepStatement = buildUpdateStatement(connection, tableName, columnNames, whereField);
+            
+            final Iterator i = columnValues.iterator();
+            int index = 1;
+            Object object = null;
+            
+            while (i.hasNext()) {
+                object = i.next();
+                prepStatement.setObject(index++, object);                
+            }
+            prepStatement.setObject(index, whereValue);
+            
+            recordsUpdated = prepStatement.executeUpdate();
+            
+        }catch (SQLException e) {
+            throw e;
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            try {
+                prepStatement.close();
+                if (closeConnection) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw e;
+            }
+        }
+        return recordsUpdated;
     }
-
-    public void setConnection(Connection connection) {
-        this.connection = connection;
-    }
-
-    public Statement getStatement() {
-        return statement;
-    }
-
-    public void setStatement(Statement statement) {
-        this.statement = statement;
-    }
-
-    public ResultSet getResultSet() {
-        return resultSet;
-    }
-
-    public void setResultSet(ResultSet resultSet) {
-        this.resultSet = resultSet;
-    }                
     
+    @Override
+    public int deleteRecords(String tableName, String whereField, Object whereValue, boolean closeConnection) throws SQLException, Exception {
+        prepStatement = null;
+        int recordsDeleted = 0;
+        
+        try {
+            prepStatement = buildDeleteStatement(connection, tableName, whereField);
+
+            if (whereField != null) {
+                prepStatement.setObject(1, whereValue);
+            }
+            
+            recordsDeleted = prepStatement.executeUpdate();
+            
+        } catch (SQLException e) {
+            throw e;
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            try {
+                prepStatement.close();
+                if (closeConnection) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                throw e;
+            }
+        }
+        return recordsDeleted;
+    }
+    
+    private PreparedStatement buildInsertStatement(Connection connection, String tableName, List columnNames) throws SQLException {
+        StringBuffer sql = new StringBuffer("INSERT INTO ");
+        sql.append(tableName).append(" ");
+        
+        StringJoiner stringJoin = new StringJoiner(",","(",")");
+        final Iterator i = columnNames.iterator();
+        
+        while(i.hasNext()) {
+            stringJoin.add((String) i.next());            
+        }
+        sql.append(stringJoin.toString());
+        
+        sql.append(" VALUES ");
+        stringJoin = new StringJoiner(",","(",")");
+        for (Object col : columnNames) {
+            stringJoin.add("?");            
+        }
+        sql.append(stringJoin.toString());
+        
+        
+        return connection.prepareStatement(sql.toString());        
+    }
+    
+    private PreparedStatement buildUpdateStatement(Connection connection, String tableName, List columnNames, String whereField) throws SQLException {
+        StringBuffer sql = new StringBuffer("UPDATE ");
+        (sql.append(tableName)).append(" SET ");
+        
+        final Iterator i = columnNames.iterator();
+        while(i.hasNext()) {
+            (sql.append((String) i.next())).append(" = ?, ");
+        }
+        sql = new StringBuffer((sql.toString()).substring(0, (sql.toString()).lastIndexOf(", ")));
+        ((sql.append(" WHERE ")).append(whereField)).append(" = ? ");
+        final String finalSQL = sql.toString();
+        
+        
+        return connection.prepareStatement(finalSQL);        
+    }
+    
+    private PreparedStatement buildDeleteStatement(Connection connection, String tableName, String whereField) throws SQLException {
+        final StringBuffer sql = new StringBuffer("DELETE FROM ");
+        sql.append(tableName);
+        
+        if(whereField != null) {
+            sql.append(" WHERE ");
+            (sql.append(whereField)).append(" = ? ");
+        }
+        final String finalSQL = sql.toString();
+        
+        return connection.prepareStatement(finalSQL);
+    }
+    
+    public static void main(String[] args) throws Exception {
+        MySqlDBAccessor db = new MySqlDBAccessor();
+        
+        db.openConnection("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/book", "root", "admin");                    
+        db.insertRecord("author", Arrays.asList("author_name", "date_added"), Arrays.asList("Peter Mann", new java.util.Date()), true);
+    }
 }
