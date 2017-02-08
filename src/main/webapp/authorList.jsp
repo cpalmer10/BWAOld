@@ -16,7 +16,7 @@
         <title>Author List</title>
     </head>
     <body>        
-        <h1>Author List</h1>
+        <h1 id="pageHeader">Author List</h1>
         <table width="500" border="1" cellspacing="0" cellpadding="4">
             <tr id="tableHeaders">
                 <th align="left">ID</th>

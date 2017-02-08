@@ -7,6 +7,7 @@ and open the template in the editor.
     Created on : Feb 8, 2017, 10:53:22 AM
     Author     : Chris
 */
+
 tr:nth-of-type(odd){
     background-color: lightskyblue;
 }
@@ -14,4 +15,9 @@ tr:nth-of-type(odd){
 #tableHeaders {
     background-color: black;
     color: white;
+}
+
+#pageHeader {
+    font-weight: bold;
+    font-family: "Times New Roman", sans-serif;
 }
