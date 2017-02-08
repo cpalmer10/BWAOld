@@ -70,7 +70,7 @@ public class DB_Generic implements DBAccessor {
             Statement stmt = null;
             ResultSet rs = null;
             ResultSetMetaData metaData = null;
-            final Map record=new HashMap();
+            final Map record = new HashMap();
           
             try {
                     stmt = conn.createStatement();
