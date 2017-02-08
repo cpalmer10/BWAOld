@@ -6,7 +6,9 @@ import java.util.Map;
 
 public interface DBAccessor {
     public abstract void openConnection(String driverClassName, String url, String username, String password) throws IllegalArgumentException, ClassNotFoundException, SQLException;
-    public abstract void closeConnection() throws SQLException;   
+    public abstract void closeConnection() throws SQLException;
+    public abstract List<Map<String,Object>> findRecordsFor(String tableName, int maxRecords) throws SQLException;
+    public abstract List<Map<String,Object>> findAllRecords(String tableName) throws SQLException;
     public abstract List findRecords(String sqlString, boolean closeConnection) throws SQLException, Exception;
     public abstract Map getRecordByID(String table, String primaryKeyField, Object keyValue, boolean closeConnection) throws SQLException, Exception;
     public abstract boolean insertRecord(String tableName, List colDescriptors, List colValues, boolean closeConnection) throws SQLException, Exception;

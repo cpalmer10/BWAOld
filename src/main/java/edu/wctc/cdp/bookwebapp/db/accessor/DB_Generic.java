@@ -4,10 +4,13 @@ import java.util.*;
 import java.sql.*;
 
 public class DB_Generic implements DBAccessor {
-    private Connection conn;
+    private Connection connection;
+    private Statement statement;
+    private ResultSet resultSet;
         
     public DB_Generic() {}
-	
+    
+    @Override
     public void openConnection(String driverClassName, String url, String username, String password) throws IllegalArgumentException, ClassNotFoundException, SQLException
     {
         String msg = "Error: url is null or zero length!";
@@ -15,16 +18,39 @@ public class DB_Generic implements DBAccessor {
         username = (username == null) ? "" : username;
         password = (password == null) ? "" : password;
         Class.forName (driverClassName);
-        conn = DriverManager.getConnection(url, username, password);
+        connection = DriverManager.getConnection(url, username, password);
     }
+     @Override
     public void closeConnection() throws SQLException {
-        conn.close();
+        connection.close();
+    }
+    @Override
+    public List<Map<String, Object>> findRecordsFor(String tableName, int maxRecords) throws SQLException {
+        List<Map<String,Object>> results = new ArrayList<Map<String,Object>>();        
+        String sql = "SELECT * FROM " + tableName + " LIMIT " + maxRecords;
+        
+        statement = connection.createStatement();
+        resultSet = statement.executeQuery(sql);
+        
+        return results;
     }
 
+    @Override
+    public List<Map<String, Object>> findAllRecords(String tableName) throws SQLException {
+        List<Map<String,Object>> results = new ArrayList<Map<String,Object>>();        
+        String sql = "SELECT * FROM " + tableName;
+        
+        statement = connection.createStatement();
+        resultSet = statement.executeQuery(sql);
+        
+        return results;
+    }
+    
+    @Override
     public List findRecords(String sqlString, boolean closeConnection) throws SQLException, Exception
     {
-        Statement stmt = null;
-        ResultSet rs = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
         ResultSetMetaData metaData = null;
         final List list = new ArrayList();
         Map record = null;
@@ -32,16 +58,16 @@ public class DB_Generic implements DBAccessor {
             // do this in an excpetion handler so that we can depend on the
             // finally clause to close the connection
         try {
-                stmt = conn.createStatement();
-                rs = stmt.executeQuery(sqlString);
-                metaData = rs.getMetaData();
+                statement = connection.createStatement();
+                resultSet = statement.executeQuery(sqlString);
+                metaData = resultSet.getMetaData();
                 final int fields = metaData.getColumnCount();
 
-                while( rs.next() ) {
+                while( resultSet.next() ) {
                         record = new HashMap();
                         for( int i=1; i <= fields; i++ ) {
                                 try {
-                                        record.put( metaData.getColumnName(i), rs.getObject(i) );
+                                    record.put( metaData.getColumnName(i), resultSet.getObject(i) );
                                 } catch(NullPointerException npe) { 
                                         // no need to do anything... if it fails, just ignore it and continue
                                 }
@@ -55,8 +81,8 @@ public class DB_Generic implements DBAccessor {
                 throw e;
         } finally {
                 try {
-                        stmt.close();
-                        if(closeConnection) conn.close();
+                        statement.close();
+                        if(closeConnection) connection.close();
                 } catch(SQLException e) {
                         throw e;
                 } // end try
@@ -64,7 +90,7 @@ public class DB_Generic implements DBAccessor {
 
         return list; // will  be null if none found
     }
-    
+    @Override
     public Map getRecordByID(String table, String primaryKeyField, Object keyValue, boolean closeConnection) throws SQLException, Exception
     {
             Statement stmt = null;
@@ -73,7 +99,7 @@ public class DB_Generic implements DBAccessor {
             final Map record = new HashMap();
           
             try {
-                    stmt = conn.createStatement();
+                    stmt = connection.createStatement();
                     String sql2;
 
                     if(keyValue instanceof String){
@@ -102,7 +128,7 @@ public class DB_Generic implements DBAccessor {
             } finally {
                     try {
                             stmt.close();
-                            if(closeConnection) conn.close();
+                            if(closeConnection) connection.close();
                     } catch(SQLException e) {
                             throw e;
                     } // end try
@@ -110,6 +136,7 @@ public class DB_Generic implements DBAccessor {
 
             return record;
     }
+    @Override
     public boolean insertRecord(String tableName, List colDescriptors, List colValues, boolean closeConnection) throws SQLException, Exception
     {
             PreparedStatement pstmt = null;
@@ -118,7 +145,7 @@ public class DB_Generic implements DBAccessor {
             // do this in an excpetion handler so that we can depend on the
             // finally clause to close the connection
             try {
-                    pstmt = buildInsertStatement(conn,tableName,colDescriptors);
+                    pstmt = buildInsertStatement(connection,tableName,colDescriptors);
 
                     final Iterator i=colValues.iterator();
                     int index = 1;
@@ -149,7 +176,7 @@ public class DB_Generic implements DBAccessor {
             } finally {
                     try {
                             pstmt.close();
-                            if(closeConnection) conn.close();
+                            if(closeConnection) connection.close();
                     } catch(SQLException e) {
                             throw e;
                     } // end try
@@ -161,7 +188,7 @@ public class DB_Generic implements DBAccessor {
                     return false;
             }
     }
- 
+    @Override
     public int updateRecords(String tableName, List colDescriptors, List colValues, String whereField, Object whereValue, boolean closeConnection) throws SQLException, Exception
     {
             PreparedStatement pstmt = null;
@@ -170,7 +197,7 @@ public class DB_Generic implements DBAccessor {
             // do this in an excpetion handler so that we can depend on the
             // finally clause to close the connection
             try {
-                    pstmt = buildUpdateStatement(conn,tableName,colDescriptors,whereField);
+                    pstmt = buildUpdateStatement(connection,tableName,colDescriptors,whereField);
 
                     final Iterator i=colValues.iterator();
                     int index = 1;
@@ -214,7 +241,7 @@ public class DB_Generic implements DBAccessor {
             } finally {
                     try {
                             pstmt.close();
-                            if(closeConnection) conn.close();
+                            if(closeConnection) connection.close();
                     } catch(SQLException e) {
                             throw e;
                     } // end try
@@ -222,7 +249,7 @@ public class DB_Generic implements DBAccessor {
 
             return recsUpdated;
     }
-
+    @Override
     public int deleteRecords(String tableName, String whereField, Object whereValue, boolean closeConnection) throws SQLException, Exception
     {
             PreparedStatement pstmt = null;
@@ -231,7 +258,7 @@ public class DB_Generic implements DBAccessor {
             // do this in an excpetion handler so that we can depend on the
             // finally clause to close the connection
             try {
-                    pstmt = buildDeleteStatement(conn,tableName,whereField);
+                    pstmt = buildDeleteStatement(connection,tableName,whereField);
 
                     // delete all records if whereField is null
                     if(whereField != null ) {
@@ -261,7 +288,7 @@ public class DB_Generic implements DBAccessor {
             } finally {
                     try {
                             pstmt.close();
-                            if(closeConnection) conn.close();
+                            if(closeConnection) connection.close();
                     } catch(SQLException e) {
                             throw e;
                     } // end try
@@ -323,6 +350,8 @@ public class DB_Generic implements DBAccessor {
         List records = db.findRecords("select total_hours, total_fees from RunTotals", true);
         System.out.println(records);
     }
+
+    
 
 
 } // end class
