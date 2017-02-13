@@ -8,6 +8,7 @@ package edu.wctc.cdp.bookwebapp.model;
 import edu.wctc.cdp.bookwebapp.db.accessor.DBAccessor;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +48,13 @@ public class AuthorDao {
             Author author = new Author();
             Object objAuthorId = recData.get("author_id");
             author.setAuthorId((Integer)recData.get("author_id"));
-            
+            Object objName = recData.get("author_name");
+            String name = objName != null ? objName.toString() : "";
+            author.setAuthorName(name);
+            Object objDate = recData.get("date_added");
+            Date dateAdded = objDate != null ? (Date)objDate : null;
+            author.setDateAdded(dateAdded);            
+            authorList.add(author);
         }
         
         
