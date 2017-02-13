@@ -46,7 +46,7 @@ public class AuthorDao {
         for(Map<String, Object> recData : rawData) {
             Author author = new Author();
             Object objAuthorId = recData.get("author_id");
-            author.setAuthorId((Integer)objAuthorId);
+            author.setAuthorId((Integer)recData.get("author_id"));
             
         }
         
