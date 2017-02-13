@@ -349,9 +349,11 @@ public class MySqlDBAccessor implements DBAccessor {
     }
     
     public static void main(String[] args) throws Exception {
-        MySqlDBAccessor db = new MySqlDBAccessor();
+//        DBAccessor db = new MySqlDBAccessor();
         
-        db.openConnection("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/book", "root", "admin");                    
-        db.insertRecord("author", Arrays.asList("author_name", "date_added"), Arrays.asList("Peter Mann", new java.util.Date()), true);
+//        db.openConnection("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/book", "root", "admin");                    
+//        db.insertRecord("author", Arrays.asList("author_name", "date_added"), Arrays.asList("Peter Mann", new java.util.Date()), false);
+//        db.insertRecord("author", Arrays.asList("author_name", "date_added"), Arrays.asList("Doug Flutie", new java.util.Date()), false);
+        //db.insertRecord("author", Arrays.asList("author_name", "date_added"), Arrays.asList("Jasper Parnevik", new java.util.Date()), true);
     }
 }

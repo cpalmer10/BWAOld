@@ -13,8 +13,8 @@
     </head>
     <body>
         <h1>Add Author</h1>
-        <form>
-            Author Name:<input type="text" name="author_name">
+        <form id="add_author" name="add_author" method="POST" action="AuthorController?action=add">
+            Author Name:<input type="text" id="author_name" name="author_name">
             <input type="submit" name="submit" value="Submit">
         </form>
         

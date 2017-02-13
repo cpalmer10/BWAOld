@@ -35,6 +35,7 @@ public class AuthorController extends HttpServlet {
     private static final String LIST_ACTION = "list";
     private static final String UPDATE_ACTION = "update";
     private static final String ADD_ACTION = "add";
+    private static final String ADDSHOW_ACTION = "addShow";
     private static final String ACTION_PARAM = "action";
   
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -55,9 +56,13 @@ public class AuthorController extends HttpServlet {
                     
                     destination = UPDATE_PAGE;
                     break;
-                case ADD_ACTION:
-                    
-                    destination = ADD_PAGE;                    
+                case ADDSHOW_ACTION:
+                    destination = ADD_PAGE;
+                    break;
+                case ADD_ACTION:                    
+                    String name = request.getParameter("author_name");                   
+                    authorService.addAuthor(name);
+                    destination = LIST_PAGE;                    
                     break;
                 case DELETE_ACTION:
                     

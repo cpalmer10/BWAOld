@@ -16,7 +16,7 @@
         <ol>
             <li><a href="AuthorController?action=list">View all Authors</a></li>
             <li><a href="AuthorController?action=update">Update Author</a></li>
-            <li><a href="AuthorController?action=add">Add Author</a></li>
+            <li><a href="AuthorController?action=addShow">Add Author</a></li>
             <li><a href="AuthorController?action=delete">Delete Author</a></li>            
             <li>Soon™</li>
         </ol>
