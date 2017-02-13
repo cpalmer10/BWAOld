@@ -37,7 +37,6 @@ public class AuthorService {
     public void addAuthor(String name) throws Exception {
         DBAccessor db = new MySqlDBAccessor();
         db.openConnection("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/book", "root", "admin");  
-        
         db.insertRecord("author", Arrays.asList("author_name", "date_added"), Arrays.asList(name, new java.util.Date()), true);
     }
     

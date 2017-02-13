@@ -15,9 +15,9 @@
         <h1>Pick an Administrative Task</h1>
         <ol>
             <li><a href="AuthorController?action=list">View all Authors</a></li>
-            <li><a href="AuthorController?action=update">Update Author</a></li>
+            <li><a href="AuthorController?action=updateShow">Update Author</a></li>
             <li><a href="AuthorController?action=addShow">Add Author</a></li>
-            <li><a href="AuthorController?action=delete">Delete Author</a></li>            
+            <li><a href="AuthorController?action=deleteShow">Delete Author</a></li>            
             <li>Soon™</li>
         </ol>
         

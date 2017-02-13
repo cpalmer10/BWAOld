@@ -32,8 +32,10 @@ public class AuthorController extends HttpServlet {
     private static final String DELETE_PAGE = "/deleteAuthor.jsp";
     private static final String HOME_PAGE = "/index.jsp";
     private static final String DELETE_ACTION = "delete";
+    private static final String DELETESHOW_ACTION = "deleteShow";
     private static final String LIST_ACTION = "list";
     private static final String UPDATE_ACTION = "update";
+    private static final String UPDATESHOW_ACTION = "updateShow";
     private static final String ADD_ACTION = "add";
     private static final String ADDSHOW_ACTION = "addShow";
     private static final String ACTION_PARAM = "action";
@@ -52,22 +54,29 @@ public class AuthorController extends HttpServlet {
                     request.setAttribute("authors", authors);
                     destination = LIST_PAGE;
                     break;
+                case DELETE_ACTION:
+                    
+                    destination = HOME_PAGE;
+                    break;
                 case UPDATE_ACTION:
                     
-                    destination = UPDATE_PAGE;
+                    destination = HOME_PAGE;
+                    break;                
+                case ADD_ACTION:                    
+                    String name = request.getParameter("author_name");                   
+                    authorService.addAuthor(name);
+                    destination = HOME_PAGE;                    
                     break;
                 case ADDSHOW_ACTION:
                     destination = ADD_PAGE;
                     break;
-                case ADD_ACTION:                    
-                    String name = request.getParameter("author_name");                   
-                    authorService.addAuthor(name);
-                    destination = LIST_PAGE;                    
+                case UPDATESHOW_ACTION:
+                    destination = UPDATE_PAGE;
                     break;
-                case DELETE_ACTION:
-                    
+                case DELETESHOW_ACTION:
                     destination = DELETE_PAGE;
                     break;
+                
                           
            }                                       
         } catch (Exception e) {
