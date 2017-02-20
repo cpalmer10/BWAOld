@@ -15,9 +15,13 @@
     </head>
     <body>
         <h1>Update Author</h1>
-        <form>
-                        
-        </form>
+        
+        <select> 
+            <c:forEach var="a" items="${authorUpdate}">
+                <option value="${a.authorName}">${a.authorName}</option>                
+            </c:forEach>
+        </select>   
+        
         <br><a href="index.jsp">Back to Home</a>
     </body>
 </html>

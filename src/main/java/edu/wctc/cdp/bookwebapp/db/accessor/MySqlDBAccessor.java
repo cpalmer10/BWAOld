@@ -104,7 +104,7 @@ public class MySqlDBAccessor implements DBAccessor {
     }
     
     @Override
-    public List findRecords(String sqlString, boolean closeConnection) throws SQLException, Exception {
+    public List findRecords(String sqlString) throws SQLException, Exception {
        statement = null;
        resultSet = null;
        metaData = null;     
@@ -132,21 +132,12 @@ public class MySqlDBAccessor implements DBAccessor {
            throw e;          
        } catch (Exception e) {
            throw e;
-       } finally {
-           try {
-               statement.close();
-               if (closeConnection) {
-                   connection.close();
-               }           
-           } catch (SQLException e) {
-               throw e;
-           } 
-       }
+       } 
        return recordsList;
     }
     
     @Override
-    public Map getRecordByID(String tableName, String primaryKeyField, Object keyValue, boolean closeConnection) throws SQLException, Exception {
+    public Map getRecordByID(String tableName, String primaryKeyField, Object keyValue) throws SQLException, Exception {
         statement = null;
         resultSet = null;
         metaData = null;
@@ -177,21 +168,12 @@ public class MySqlDBAccessor implements DBAccessor {
            throw e;          
         } catch (Exception e) {
            throw e;
-        } finally {
-            try {
-               statement.close();
-               if (closeConnection) {
-                   connection.close();
-               }           
-           } catch (SQLException e) {
-               throw e;
-           } 
-        }
+        } 
         return record;        
     }
 
     @Override
-    public boolean insertRecord(String tableName, List columnNames, List columnValues, boolean closeConnection) throws SQLException, Exception {
+    public boolean insertRecord(String tableName, List<String> columnNames, List columnValues) throws SQLException, Exception {
         prepStatement = null;
         int recordsUpdated = 0;
         
@@ -210,17 +192,7 @@ public class MySqlDBAccessor implements DBAccessor {
             throw e;
         } catch (Exception e) {
             throw e;
-        } finally {
-            try {
-                prepStatement.close();
-                if (closeConnection) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                throw e;
-            }
-        }
-        
+        }         
         if (recordsUpdated == 1) {
             return true;
         } else {
@@ -229,7 +201,7 @@ public class MySqlDBAccessor implements DBAccessor {
     }
     
     @Override
-    public int updateRecords(String tableName, List columnNames, List columnValues, String whereField, Object whereValue, boolean closeConnection) throws SQLException, Exception {
+    public int updateRecords(String tableName, List<String> columnNames, List columnValues, String whereField, Object whereValue) throws SQLException, Exception {
         prepStatement = null;
         int recordsUpdated = 0;
         
@@ -252,24 +224,14 @@ public class MySqlDBAccessor implements DBAccessor {
             throw e;
         } catch (Exception e) {
             throw e;
-        } finally {
-            try {
-                prepStatement.close();
-                if (closeConnection) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                throw e;
-            }
-        }
+        } 
         return recordsUpdated;
     }
     
     @Override
-    public int deleteRecords(String tableName, String whereField, Object whereValue, boolean closeConnection) throws SQLException, Exception {
+    public int deleteRecords(String tableName, String whereField, Object whereValue) throws SQLException, Exception {
         prepStatement = null;
-        int recordsDeleted = 0;
-        
+        int recordsDeleted = 0;        
         try {
             prepStatement = buildDeleteStatement(connection, tableName, whereField);
 
@@ -283,16 +245,7 @@ public class MySqlDBAccessor implements DBAccessor {
             throw e;
         } catch (Exception e) {
             throw e;
-        } finally {
-            try {
-                prepStatement.close();
-                if (closeConnection) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                throw e;
-            }
-        }
+        } 
         return recordsDeleted;
     }
     
@@ -349,11 +302,14 @@ public class MySqlDBAccessor implements DBAccessor {
     }
     
     public static void main(String[] args) throws Exception {
-//        DBAccessor db = new MySqlDBAccessor();
+        DBAccessor db = new MySqlDBAccessor();
         
-//        db.openConnection("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/book", "root", "admin");                    
-//        db.insertRecord("author", Arrays.asList("author_name", "date_added"), Arrays.asList("Peter Mann", new java.util.Date()), false);
-//        db.insertRecord("author", Arrays.asList("author_name", "date_added"), Arrays.asList("Doug Flutie", new java.util.Date()), false);
-        //db.insertRecord("author", Arrays.asList("author_name", "date_added"), Arrays.asList("Jasper Parnevik", new java.util.Date()), true);
-    }
+        db.openConnection("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/book", "root", "admin");                    
+        List<Map<String,Object>> records = db.findAllRecords("author");
+        db.closeConnection();
+        
+        for(Map<String,Object> record : records) {
+            System.out.println(record);
+        }
+    }    
 }

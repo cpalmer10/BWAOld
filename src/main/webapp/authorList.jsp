@@ -26,10 +26,10 @@
             
         <c:forEach var="a" items="${authors}" varStatus="rowCount">
             <tr>
-                <td align="left">${a.author_id}</td>
-                <td align="left"><c:out value="${a.author_name}"/></td>
+                <td align="left">${a.authorId}</td>
+                <td align="left"><c:out value="${a.authorName}"/></td>
                 <td align="right">
-                    <fmt:formatDate pattern="M/d/yyyy" value="${a.date_added}"></fmt:formatDate>
+                    <fmt:formatDate pattern="M/d/yyyy" value="${a.dateAdded}"></fmt:formatDate>
                 </td>                
             </tr>            
         </c:forEach>                        

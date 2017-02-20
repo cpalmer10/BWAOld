@@ -9,9 +9,9 @@ public interface DBAccessor {
     public abstract void closeConnection() throws SQLException;
     public abstract List<Map<String,Object>> findRecordsFor(String tableName, int maxRecords) throws SQLException;
     public abstract List<Map<String,Object>> findAllRecords(String tableName) throws SQLException;
-    public abstract List findRecords(String sqlString, boolean closeConnection) throws SQLException, Exception;
-    public abstract Map getRecordByID(String table, String primaryKeyField, Object keyValue, boolean closeConnection) throws SQLException, Exception;
-    public abstract boolean insertRecord(String tableName, List colDescriptors, List colValues, boolean closeConnection) throws SQLException, Exception;
-    public int updateRecords(String tableName, List colDescriptors, List colValues, String whereField, Object whereValue, boolean closeConnection) throws SQLException, Exception;
-    public abstract int deleteRecords(String tableName, String whereField, Object whereValue, boolean closeConnection) throws SQLException, Exception;
+    public abstract List findRecords(String sqlString) throws SQLException, Exception;
+    public abstract Map getRecordByID(String table, String primaryKeyField, Object keyValue) throws SQLException, Exception;
+    public abstract boolean insertRecord(String tableName, List<String> columnNames, List columnValues) throws SQLException, Exception;
+    public int updateRecords(String tableName, List<String> columnNames, List columnValues, String whereField, Object whereValue) throws SQLException, Exception;
+    public abstract int deleteRecords(String tableName, String whereField, Object whereValue) throws SQLException, Exception;
 }

@@ -7,6 +7,7 @@ package edu.wctc.cdp.bookwebapp.model;
 
 import edu.wctc.cdp.bookwebapp.db.accessor.DBAccessor;
 import edu.wctc.cdp.bookwebapp.db.accessor.MySqlDBAccessor;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -18,26 +19,34 @@ import java.util.Map;
  * @author Palmer
  */
 public class AuthorService {
+    private AuthorDaoInterface dao;
+
+    public AuthorService(AuthorDaoInterface dao) {
+        this.dao = dao;
+    }
                                    
-    public List<Map<String, Object>> getAllAuthors() throws Exception {
-        DBAccessor db = new MySqlDBAccessor();
-        db.openConnection("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/book", "root", "admin");        
-        
-        return db.findAllRecords("author");                
+    public List<Author> getAllAuthors(String tableName) throws Exception {
+        return dao.getAuthorList(tableName);        
     }
     
-    public void updateAuthor() {
-        
+    public void updateAuthor(String tableName, List<String> columnNames, List columnValues, String whereField, Object whereValue) throws ClassNotFoundException, SQLException, Exception {
+       dao.updateAuthor(tableName, columnNames, columnValues, whereField, whereValue);
     }
     
-    public void deleteAuthor() {
-        
+    public void deleteAuthor(Integer authorID) throws ClassNotFoundException, Exception {
+        dao.deleteAuthor(authorID);
     }
     
     public void addAuthor(String name) throws Exception {
-        DBAccessor db = new MySqlDBAccessor();
-        db.openConnection("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/book", "root", "admin");  
-        db.insertRecord("author", Arrays.asList("author_name", "date_added"), Arrays.asList(name, new java.util.Date()), true);
+        dao.insertAuthor(name);        
     }
     
+    
+    public AuthorDaoInterface getDao() {
+        return dao;
+    }
+
+    public void setDao(AuthorDaoInterface dao) {
+        this.dao = dao;
+    }    
 }

@@ -5,7 +5,10 @@
  */
 package edu.wctc.cdp.bookwebapp.controller;
 
+import edu.wctc.cdp.bookwebapp.db.accessor.MySqlDBAccessor;
 import edu.wctc.cdp.bookwebapp.model.Author;
+import edu.wctc.cdp.bookwebapp.model.AuthorDao;
+import edu.wctc.cdp.bookwebapp.model.AuthorDaoInterface;
 import edu.wctc.cdp.bookwebapp.model.AuthorService;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -44,18 +47,22 @@ public class AuthorController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         String destination = HOME_PAGE;
-        String action = request.getParameter(ACTION_PARAM);
-        
-        AuthorService authorService = new AuthorService();                
+        String action = request.getParameter(ACTION_PARAM);               
+        AuthorService authorService = new AuthorService(
+                                            new AuthorDao(new MySqlDBAccessor(),
+                                                    "com.mysql.jdbc.Driver",
+                                                    "jdbc:mysql://localhost:3306/book", 
+                                                    "root","admin"));                                            
         try {
            switch (action){
                 case LIST_ACTION:
-                    List<Map<String, Object>> authors = authorService.getAllAuthors();
+                    List<Author> authors = authorService.getAllAuthors("author");
                     request.setAttribute("authors", authors);
                     destination = LIST_PAGE;
                     break;
                 case DELETE_ACTION:
-                    
+                    Integer authorID = Integer.parseInt(request.getParameter("author_id"));                   
+                    authorService.deleteAuthor(authorID);
                     destination = HOME_PAGE;
                     break;
                 case UPDATE_ACTION:
@@ -70,10 +77,14 @@ public class AuthorController extends HttpServlet {
                 case ADDSHOW_ACTION:
                     destination = ADD_PAGE;
                     break;
-                case UPDATESHOW_ACTION:
+                case UPDATESHOW_ACTION:   
+                    List<Author> authorUpdate = authorService.getAllAuthors("author");
+                    request.setAttribute("authorUpdate", authorUpdate);
                     destination = UPDATE_PAGE;
                     break;
                 case DELETESHOW_ACTION:
+                    List<Author> authorDelete = authorService.getAllAuthors("author");
+                    request.setAttribute("authorDelete", authorDelete);
                     destination = DELETE_PAGE;
                     break;
                 
