@@ -29,8 +29,12 @@ public class AuthorService {
         return dao.getAuthorList(tableName);        
     }
     
-    public void updateAuthor(String tableName, List<String> columnNames, List columnValues, String whereField, Object whereValue) throws ClassNotFoundException, SQLException, Exception {
-       dao.updateAuthor(tableName, columnNames, columnValues, whereField, whereValue);
+//    public void updateAuthor(String tableName, List<String> columnNames, List columnValues, String whereField, Object whereValue) throws ClassNotFoundException, SQLException, Exception {
+//       dao.updateAuthor(tableName, columnNames, columnValues, whereField, whereValue);
+//    }
+    
+     public void updateAuthor(String authorName, Integer authorID) throws ClassNotFoundException, SQLException, Exception {
+      dao.updateAuthor(authorName, authorID);
     }
     
     public void deleteAuthor(Integer authorID) throws ClassNotFoundException, Exception {

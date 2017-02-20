@@ -16,16 +16,17 @@
     <body>
         <h1>Delete Author</h1>
         <form id="delete_author" name="delete_author" method="POST" action="AuthorController?action=delete">
-            <select> 
+            <select id="authorID" name="authorID"> 
                 <c:forEach var="a" items="${authorDelete}">
                     <option value="${a.authorId}">${a.authorName}</option>                
                 </c:forEach>
             </select>
             <input type="submit" name="delete" value="Delete">
             
-            <br><br> <h2>OR (BY ID)</h2>
             
-            <select> 
+            <!--
+            <br><br> <h2>OR (BY ID)</h2>                       
+           <select> 
                 <c:forEach var="a" items="${authorDelete}">
                     <option value="${a.authorId}">${a.authorId}</option>                
                 </c:forEach>
@@ -42,6 +43,7 @@
                 </c:forEach>
             </select>
             <input type="submit" name="delete" value="Delete">
+            -->
             
         </form>
         

@@ -19,8 +19,8 @@ public interface AuthorDaoInterface {
     
     public abstract void deleteAuthor(Integer authorID) throws IllegalArgumentException, ClassNotFoundException, SQLException, Exception;
     
-    public abstract void updateAuthor(String tableName, List<String> columnNames, List columnValues, String whereField, Object whereValue) throws IllegalArgumentException, ClassNotFoundException, SQLException, Exception;
-    
+    //public abstract void updateAuthor(String tableName, List<String> columnNames, List columnValues, String whereField, Object whereValue) throws IllegalArgumentException, ClassNotFoundException, SQLException, Exception;
+    public abstract void updateAuthor(String authorName, Integer authorID) throws IllegalArgumentException, ClassNotFoundException, SQLException, Exception;
     public abstract void insertAuthor(String name) throws IllegalArgumentException, ClassNotFoundException, SQLException, Exception;
 
         

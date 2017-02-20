@@ -71,11 +71,18 @@ public class AuthorDao implements AuthorDaoInterface {
         db.closeConnection();
     }
 
+//    @Override
+//    public void updateAuthor(String tableName, List<String> columnNames, List columnValues, String whereField, Object whereValue) throws IllegalArgumentException, ClassNotFoundException, SQLException, Exception {
+//        db.openConnection(driverClass, url, username, password);        
+//        db.updateRecords(tableName, columnNames, columnValues, whereField, whereValue);
+//        db.closeConnection();
+//        
+//    }
+    
     @Override
-    public void updateAuthor(String tableName, List<String> columnNames, List columnValues, String whereField, Object whereValue) throws IllegalArgumentException, ClassNotFoundException, SQLException, Exception {
-        db.openConnection(driverClass, url, username, password);
-        
-        db.updateRecords(tableName, columnNames, columnValues, whereField, whereValue);
+    public void updateAuthor(String authorName, Integer authorID) throws IllegalArgumentException, ClassNotFoundException, SQLException, Exception {
+        db.openConnection(driverClass, url, username, password);        
+        db.updateRecords("author", Arrays.asList("author_name"), Arrays.asList(authorName),"author_id", authorID);
         db.closeConnection();
         
     }

@@ -61,11 +61,15 @@ public class AuthorController extends HttpServlet {
                     destination = LIST_PAGE;
                     break;
                 case DELETE_ACTION:
-                    Integer authorID = Integer.parseInt(request.getParameter("author_id"));                   
+                    Integer authorID = Integer.parseInt(request.getParameter("authorID"));                   
                     authorService.deleteAuthor(authorID);
                     destination = HOME_PAGE;
                     break;
                 case UPDATE_ACTION:
+                    String authorName = request.getParameter("author_name");
+                    Integer authorID2 = Integer.parseInt(request.getParameter("authorID"));
+                        // WTF DO I DO
+                    authorService.updateAuthor(authorName, authorID2);
                     
                     destination = HOME_PAGE;
                     break;                

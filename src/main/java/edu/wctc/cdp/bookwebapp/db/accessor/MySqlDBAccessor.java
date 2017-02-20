@@ -214,7 +214,8 @@ public class MySqlDBAccessor implements DBAccessor {
             
             while (i.hasNext()) {
                 object = i.next();
-                prepStatement.setObject(index++, object);                
+                prepStatement.setObject(index, object);
+                index++;                
             }
             prepStatement.setObject(index, whereValue);
             
