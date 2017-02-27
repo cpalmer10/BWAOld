@@ -28,6 +28,12 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "AuthorController", urlPatterns = {"/AuthorController"})
 public class AuthorController extends HttpServlet {
     
+    
+    private String driverClass;
+    private String url;
+    private String username;
+    private String password;
+    
     private static final String ERR_MSG = "No parameter detected";
     private static final String LIST_PAGE = "/authorList.jsp";
     private static final String ADD_PAGE = "/addAuthor.jsp";
@@ -42,6 +48,15 @@ public class AuthorController extends HttpServlet {
     private static final String ADD_ACTION = "add";
     private static final String ADDSHOW_ACTION = "addShow";
     private static final String ACTION_PARAM = "action";
+    
+    
+    @Override
+    public void init() throws ServletException {
+        driverClass = getServletContext().getInitParameter("db.driver.class");
+        url = getServletContext().getInitParameter("db.url");
+        username = getServletContext().getInitParameter("db.username");
+        password = getServletContext().getInitParameter("db.password");        
+    }
   
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -50,9 +65,9 @@ public class AuthorController extends HttpServlet {
         String action = request.getParameter(ACTION_PARAM);               
         AuthorService authorService = new AuthorService(
                                             new AuthorDao(new MySqlDBAccessor(),
-                                                    "com.mysql.jdbc.Driver",
-                                                    "jdbc:mysql://localhost:3306/book", 
-                                                    "root","admin"));                                            
+                                                    driverClass,
+                                                    url, 
+                                                    username,password));                                          
         try {
            switch (action){
                 case LIST_ACTION:
@@ -101,8 +116,7 @@ public class AuthorController extends HttpServlet {
         RequestDispatcher dispatcher
                 = getServletContext().getRequestDispatcher(destination);
         dispatcher.forward(request, response);
-    }
-
+    }      
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -141,5 +155,4 @@ public class AuthorController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }
