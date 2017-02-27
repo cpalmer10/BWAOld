@@ -48,15 +48,6 @@ public class AuthorController extends HttpServlet {
     private static final String ADD_ACTION = "add";
     private static final String ADDSHOW_ACTION = "addShow";
     private static final String ACTION_PARAM = "action";
-    
-    
-    @Override
-    public void init() throws ServletException {
-        driverClass = getServletContext().getInitParameter("db.driver.class");
-        url = getServletContext().getInitParameter("db.url");
-        username = getServletContext().getInitParameter("db.username");
-        password = getServletContext().getInitParameter("db.password");        
-    }
   
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -131,7 +122,13 @@ public class AuthorController extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
+    @Override
+    public void init() throws ServletException {
+        driverClass = getServletContext().getInitParameter("db.driverClass");
+        url = getServletContext().getInitParameter("db.url");
+        username = getServletContext().getInitParameter("db.username");
+        password = getServletContext().getInitParameter("db.password");        
+    }
     /**
      * Handles the HTTP <code>POST</code> method.
      *
