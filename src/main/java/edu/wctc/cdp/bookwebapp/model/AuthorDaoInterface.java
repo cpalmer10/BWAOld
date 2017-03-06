@@ -5,9 +5,9 @@
  */
 package edu.wctc.cdp.bookwebapp.model;
 
-import edu.wctc.cdp.bookwebapp.db.accessor.DBAccessor;
 import java.sql.SQLException;
 import java.util.List;
+import edu.wctc.cdp.bookwebapp.db.accessor.DBAccessor;
 
 /**
  *

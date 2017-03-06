@@ -5,8 +5,6 @@
  */
 package edu.wctc.cdp.bookwebapp.model;
 
-import edu.wctc.cdp.bookwebapp.db.accessor.DBAccessor;
-import edu.wctc.cdp.bookwebapp.db.accessor.MySqlDBAccessor;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;

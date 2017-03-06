@@ -7,7 +7,7 @@
     global to your app and can be accessed from any JSP page or
     servlet. -->
     <context-param>
-        <param-name>db.driver.class</param-name>
+        <param-name>db.driverClass</param-name>
         <param-value>com.mysql.jdbc.Driver</param-value>
     </context-param>
     <context-param>
@@ -22,20 +22,23 @@
         <param-name>db.password</param-name>
         <param-value>admin</param-value>
     </context-param>
-    
-    <servlet>
-        <servlet-name>AuthorController</servlet-name>
-        <servlet-class>edu.wctc.bookwebapp.controller.AuthorController</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>AuthorController</servlet-name>
-        <url-pattern>AuthorController</url-pattern>
-    </servlet-mapping>
+    <context-param>
+        <param-name>connPoolName</param-name>
+        <param-value>jdbc/book</param-value>
+    </context-param>
+    <context-param>
+        <param-name>authorDao</param-name>
+        <param-value>edu.wctc.cdp.bookwebapp.model.ConnPoolAuthorDao</param-value>
+    </context-param>
+    <context-param>
+        <param-name>dbStrategy</param-name>
+        <param-value>edu.wctc.cdp.bookwebapp.db.accessor.MySqlDBAccessor</param-value>
+    </context-param>
+
+        
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
-    <servlet-name/>
 </web-app>
