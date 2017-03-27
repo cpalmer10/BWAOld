@@ -105,7 +105,7 @@ public class AuthorController extends HttpServlet {
                     break;
                 case UPDATESHOW_ACTION:   
                     List<Author> authorUpdate = authorService.getAllAuthors("author");
-                    request.setAttribute("authorUpdate", authorUpdate);
+                    request.setAttribute("authorUpdate", authorUpdate);                                       
                     destination = UPDATE_PAGE;
                     break;
                 case DELETESHOW_ACTION:

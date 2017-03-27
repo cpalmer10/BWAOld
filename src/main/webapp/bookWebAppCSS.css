@@ -12,18 +12,18 @@ html,body {
     font-family: "Arial", sans-serif;
 }
 
-tr:nth-of-type(even){
-    background-color: whitesmoke;
-}
-tr:nth-of-type(odd){
-    background-color: lightskyblue;  
-}
+//tr:nth-of-type(even){
+    //background-color: whitesmoke;
+//}
+//tr:nth-of-type(odd){
+  //  background-color: lightskyblue;  
+//}
 
-#tableHeaders {
-    background-color: black;
-    color: white;
-}
+//#tableHeaders {
+    //background-color: black;
+    //color: white;
+//}
 
-#pageHeader {
-    font-weight: bold;
-}
+//#pageHeader {
+    //font-weight: bold;
+//}

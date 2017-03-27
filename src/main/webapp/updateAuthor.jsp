@@ -18,15 +18,16 @@
         <form id="update_author" name="update_author" method="POST" action="AuthorController?action=update">
             <table>
                 <tr>
-                    <td>
+                    <td>                        
                         <select id="authorUpdate" name="authorID"> 
                             <c:forEach var="a" items="${authorUpdate}">
-                                <option value="${a.authorId}">${a.authorName}</option>                
+                                <option value="${a.authorId}">${a.authorName}</option>                                                                  
                             </c:forEach>                                
-                        </select>                       
+                        </select>
+                            
                     </td>
                     <td>
-                        <input type="text" id="author_name" name="author_name">
+                        <input type="text" id="author_name" name="author_name" placeholder="${a.authorName}">
                     </td>
                     <td>
                         <input type="submit" name="update" value="Update">

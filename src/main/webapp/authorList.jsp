@@ -13,11 +13,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="bookWebAppCSS.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">                
         <title>Author List</title>
     </head>
-    <body>        
+    <body>
+        
         <h1 id="pageHeader">Author List</h1>
-        <table width="500" border="1" cellspacing="0" cellpadding="4">
+        <table id="authorTable">
+            
             <tr id="tableHeaders">
                 <th align="left">ID</th>
                 <th align="left">Author Name</th>
@@ -33,7 +36,14 @@
                 </td>                
             </tr>            
         </c:forEach>                        
-        </table>
+        </table>       
         <br><a href="index.jsp">Back to Home</a>
     </body>
+    
+    <script type=text/javascript" src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#authorTable').DataTable();
+        }); 
+    </script>
 </html>
