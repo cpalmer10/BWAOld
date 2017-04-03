@@ -34,13 +34,13 @@
                     </td>
                 </tr>
                 
-<!--                <tr>
+               <tr>
                     <td>ID</td>
                     <td>
                         <input type="text" id="author_id" name="author_id" value="<c:out value="${a.authorId}"/>">
                     </td>                
                 </tr>
--->
+
             </table>
         </form>                                               
         <br><br><a href="index.jsp">Back to Home</a>

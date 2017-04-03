@@ -30,11 +30,11 @@ public class AuthorFacade extends AbstractFacade<Author> {
         super(Author.class);
     }
     
-    public int deletebyId(String id){
+    public int deleteById(String id){
         Integer iId = Integer.parseInt(id);
         String jpql = "delete from Author a where a.authorId = :id";
         Query q = this.getEntityManager().createQuery(jpql);
-        q.setParameter("iId",id);
+        q.setParameter("iId",iId);
         return q.executeUpdate();
         
     }
@@ -54,7 +54,11 @@ public class AuthorFacade extends AbstractFacade<Author> {
         this.edit(a);
     }
     
-    
-    
-    
+    public void addOrUpdate(String id, String name) {
+        if(id == null || id.isEmpty() || id.equals("0")){
+            add(name);
+        } else {
+            update(id,name);
+        }
+    }                
 }

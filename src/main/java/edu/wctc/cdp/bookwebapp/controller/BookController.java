@@ -5,30 +5,33 @@
  */
 package edu.wctc.cdp.bookwebapp.controller;
 
+
 import edu.wctc.cdp.bookwebapp.model.Author;
+import edu.wctc.cdp.bookwebapp.model.AuthorFacade;
+import edu.wctc.cdp.bookwebapp.model.Book;
+import edu.wctc.cdp.bookwebapp.model.BookFacade;
 import java.io.IOException;
+import java.util.List;
+import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import edu.wctc.cdp.bookwebapp.model.AuthorFacade;
-import java.util.List;
-import javax.ejb.EJB;
 
 /**
  *
  * @author Palmer
  */
-@WebServlet(name = "AuthorController", urlPatterns = {"/AuthorController"})
-public class AuthorController extends HttpServlet {               
-        
+@WebServlet(name = "BookController", urlPatterns = {"/BookController"})
+public class BookController extends HttpServlet {   
+    
     private static final String ERR_MSG = "No parameter detected";
-    private static final String LIST_PAGE = "/authorList.jsp";
-    private static final String ADD_PAGE = "/addAuthor.jsp";
-    private static final String UPDATE_PAGE = "/updateAuthor.jsp";
-    private static final String DELETE_PAGE = "/deleteAuthor.jsp";
+    private static final String LIST_PAGE = "/bookList.jsp";
+    private static final String ADD_PAGE = "/addBook.jsp";
+    private static final String UPDATE_PAGE = "/updateBook.jsp";
+    private static final String DELETE_PAGE = "/deleteBook.jsp";
     private static final String HOME_PAGE = "/index.jsp";
     private static final String DELETE_ACTION = "delete";
     private static final String DELETESHOW_ACTION = "deleteShow";
@@ -38,6 +41,9 @@ public class AuthorController extends HttpServlet {
     private static final String ADD_ACTION = "add";
     private static final String ADDSHOW_ACTION = "addShow";
     private static final String ACTION_PARAM = "action";
+    
+    @EJB
+    private BookFacade bookService;
     
     @EJB
     private AuthorFacade authorService;
@@ -50,37 +56,45 @@ public class AuthorController extends HttpServlet {
                                                                                            
         try {           
            switch (action){
-                case LIST_ACTION:                    
-                    List<Author> authors = authorService.findAll();
-                    request.setAttribute("authors", authors);
+                case LIST_ACTION:
+                    List<Book> books = bookService.findAll();
+                    request.setAttribute("books", books);
                     destination = LIST_PAGE;
                     break;
                 case DELETE_ACTION:                                      
-                    authorService.deleteById(request.getParameter("authorID"));
+                    bookService.deleteById(request.getParameter("bookID"));
                     destination = HOME_PAGE;
                     break;
                 case UPDATE_ACTION:
-                    String authorName = request.getParameter("author_name");                    
-                        // WTF DO I DO
-                    authorService.update(request.getParameter("authorID"), authorName);                    
+                    String isbn = request.getParameter("isbn");
+                    String bookTitle = request.getParameter("title");                    
+                    String authorId = request.getParameter("authorId");
+                        
+                    bookService.update(request.getParameter("bookId"), bookTitle, isbn, authorId);
+                    
                     destination = HOME_PAGE;
                     break;                
                 case ADD_ACTION:                    
-                    String name = request.getParameter("author_name");                   
-                    authorService.add(name);
+                    String title = request.getParameter("title");
+                    String bookIsbn = request.getParameter("isbn");
+                    //Author authorEntity = request.getParameter("authorEntity");
+                    
+                    bookService.addNew(title, bookIsbn);//, authorEntity);
                     destination = HOME_PAGE;                    
                     break;
                 case ADDSHOW_ACTION:
+                    List<Author> authors = authorService.findAll();
+                    request.setAttribute("authors", authors);                    
                     destination = ADD_PAGE;
                     break;
-                case UPDATESHOW_ACTION:                                        
-                    List<Author> authorUpdate = authorService.findAll();
-                    request.setAttribute("authorUpdate", authorUpdate);                                       
+                case UPDATESHOW_ACTION:   
+                    List<Book> bookUpdate = bookService.findAll();
+                    request.setAttribute("bookUpdate", bookUpdate);                                       
                     destination = UPDATE_PAGE;
                     break;
                 case DELETESHOW_ACTION:
-                    List<Author> authorDelete = authorService.findAll();
-                    request.setAttribute("authorDelete", authorDelete);
+                    List<Book> bookDelete = bookService.findAll();
+                    request.setAttribute("bookDelete", bookDelete);
                     destination = DELETE_PAGE;
                     break;
                 
@@ -95,10 +109,6 @@ public class AuthorController extends HttpServlet {
         dispatcher.forward(request, response);
     }
     
-    /*
-        This helper method just makes the code more modular and readable.
-        It's single responsibility principle for a method.
-    */
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -111,13 +121,10 @@ public class AuthorController extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {       
-                processRequest(request, response);        
+            throws ServletException, IOException {
+        processRequest(request, response);
     }
-    
-    @Override
-    public void init() throws ServletException {        
-    }
+
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -128,7 +135,7 @@ public class AuthorController extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException{
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
@@ -141,4 +148,5 @@ public class AuthorController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 }

@@ -20,6 +20,14 @@
             <li><a href="AuthorController?action=addShow">Add Author</a></li>
             <li><a href="AuthorController?action=deleteShow">Delete Author</a></li>            
         </ol>
+        <br>
+        <br>
+        <ol>
+            <li><a href="BookController?action=list">View all Books</a></li>
+            <li><a href="BookController?action=updateShow">Update Book</a></li>
+            <li><a href="BookController?action=addShow">Add Book</a></li>
+            <li><a href="BookController?action=deleteShow">Delete Book</a></li>
+        </ol>
         
     </body>
 </html>
