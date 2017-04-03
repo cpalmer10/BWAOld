@@ -5,14 +5,9 @@
  */
 package edu.wctc.cdp.bookwebapp.model;
 
-import edu.wctc.cdp.bookwebapp.db.accessor.DBAccessor;
-import edu.wctc.cdp.bookwebapp.db.accessor.MySqlDBAccessor;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
+
 
 /**
  *
@@ -28,10 +23,6 @@ public class AuthorService {
     public List<Author> getAllAuthors(String tableName) throws Exception {
         return dao.getAuthorList(tableName);        
     }
-    
-//    public void updateAuthor(String tableName, List<String> columnNames, List columnValues, String whereField, Object whereValue) throws ClassNotFoundException, SQLException, Exception {
-//       dao.updateAuthor(tableName, columnNames, columnValues, whereField, whereValue);
-//    }
     
      public void updateAuthor(String authorName, Integer authorID) throws ClassNotFoundException, SQLException, Exception {
       dao.updateAuthor(authorName, authorID);

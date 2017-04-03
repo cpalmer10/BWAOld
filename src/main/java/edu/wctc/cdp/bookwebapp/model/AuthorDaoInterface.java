@@ -15,15 +15,10 @@ import java.util.List;
  */
 public interface AuthorDaoInterface {
 
-    public abstract List<Author> getAuthorList(String tableName) throws IllegalArgumentException, ClassNotFoundException, SQLException, Exception;
-    
+    public abstract List<Author> getAuthorList(String tableName) throws IllegalArgumentException, ClassNotFoundException, SQLException, Exception;    
     public abstract void deleteAuthor(Integer authorID) throws IllegalArgumentException, ClassNotFoundException, SQLException, Exception;
-    
-    //public abstract void updateAuthor(String tableName, List<String> columnNames, List columnValues, String whereField, Object whereValue) throws IllegalArgumentException, ClassNotFoundException, SQLException, Exception;
     public abstract void updateAuthor(String authorName, Integer authorID) throws IllegalArgumentException, ClassNotFoundException, SQLException, Exception;
-    public abstract void insertAuthor(String name) throws IllegalArgumentException, ClassNotFoundException, SQLException, Exception;
-
-        
+    public abstract void insertAuthor(String name) throws IllegalArgumentException, ClassNotFoundException, SQLException, Exception;        
     public abstract DBAccessor getDb();
     public abstract String getDriverClass();
     public abstract String getPassword();
