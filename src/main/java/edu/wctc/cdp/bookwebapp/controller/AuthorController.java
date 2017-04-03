@@ -5,16 +5,10 @@
  */
 package edu.wctc.cdp.bookwebapp.controller;
 
-import edu.wctc.cdp.bookwebapp.db.accessor.MySqlDBAccessor;
 import edu.wctc.cdp.bookwebapp.model.Author;
-import edu.wctc.cdp.bookwebapp.model.AuthorDao;
-import edu.wctc.cdp.bookwebapp.model.AuthorDaoInterface;
-import edu.wctc.cdp.bookwebapp.model.AuthorService;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.util.List;
-import java.util.Map;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.servlet.RequestDispatcher;
@@ -25,27 +19,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import edu.wctc.cdp.bookwebapp.db.accessor.DBAccessor;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import edu.wctc.cdp.bookwebapp.model.AuthorFacade;
+import javax.ejb.EJB;
 
 /**
  *
  * @author Palmer
  */
 @WebServlet(name = "AuthorController", urlPatterns = {"/AuthorController"})
-public class AuthorController extends HttpServlet {
-    
-    
-    private String driverClass;
-    private String url;
-    private String username;
-    private String password;
-    private String dbStrategyClassName;
-    private String daoClassName;
-    private String jndiName;
-    
-    
-    
+public class AuthorController extends HttpServlet {               
+        
     private static final String ERR_MSG = "No parameter detected";
     private static final String LIST_PAGE = "/authorList.jsp";
     private static final String ADD_PAGE = "/addAuthor.jsp";
@@ -60,44 +43,37 @@ public class AuthorController extends HttpServlet {
     private static final String ADD_ACTION = "add";
     private static final String ADDSHOW_ACTION = "addShow";
     private static final String ACTION_PARAM = "action";
+    
+    @EJB
+    private AuthorFacade authorService;
   
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
         String destination = HOME_PAGE;
         String action = request.getParameter(ACTION_PARAM);  
-        
-        
-        //AuthorService authorService = new AuthorService(
-        //                                    new AuthorDao(new MySqlDBAccessor(),
-        //                                            driverClass,
-        //                                            url, 
-        //                                            username,
-        //                                            password));                                          
-        try {
-           AuthorService authorService = injectDependenciesAndGetAuthorService();
+                                                                                           
+        try {           
            switch (action){
                 case LIST_ACTION:
-                    List<Author> authors = authorService.getAllAuthors("author");
+                    Author authors = authorService.find(Integer.parseInt("author_id"));
                     request.setAttribute("authors", authors);
                     destination = LIST_PAGE;
                     break;
-                case DELETE_ACTION:
-                    Integer authorID = Integer.parseInt(request.getParameter("authorID"));                   
-                    authorService.deleteAuthor(authorID);
+                case DELETE_ACTION:                                      
+                    authorService.deletebyId(request.getParameter("authorID"));
                     destination = HOME_PAGE;
                     break;
                 case UPDATE_ACTION:
-                    String authorName = request.getParameter("author_name");
-                    Integer authorID2 = Integer.parseInt(request.getParameter("authorID"));
+                    String authorName = request.getParameter("author_name");                    
                         // WTF DO I DO
-                    authorService.updateAuthor(authorName, authorID2);
+                    authorService.update(authorName, request.getParameter("authorID"));
                     
                     destination = HOME_PAGE;
                     break;                
                 case ADD_ACTION:                    
                     String name = request.getParameter("author_name");                   
-                    authorService.addAuthor(name);
+                    authorService.add(name);
                     destination = HOME_PAGE;                    
                     break;
                 case ADDSHOW_ACTION:
@@ -129,66 +105,6 @@ public class AuthorController extends HttpServlet {
         This helper method just makes the code more modular and readable.
         It's single responsibility principle for a method.
     */
-    private AuthorService injectDependenciesAndGetAuthorService() throws Exception {
-        // Use Liskov Substitution Principle and Java Reflection to
-        // instantiate the chosen DBStrategy based on the class name retrieved
-        // from web.xml
-        Class dbClass = Class.forName(dbStrategyClassName);
-        // Use Java reflection to instanntiate the DBStrategy object
-        // Note that DBStrategy classes have no constructor params
-        DBAccessor db = (DBAccessor) dbClass.newInstance();
-
-        // Use Liskov Substitution Principle and Java Reflection to
-        // instantiate the chosen DAO based on the class name retrieved above.
-        // This one is trickier because the available DAO classes have
-        // different constructor params
-        AuthorDaoInterface authorDao = null;
-        Class daoClass = Class.forName(daoClassName);
-        Constructor constructor = null;
-        
-        // This will only work for the non-pooled AuthorDao
-        try {
-            constructor = daoClass.getConstructor(new Class[]{
-                DBAccessor.class, String.class, String.class, String.class, String.class
-            });
-        } catch(NoSuchMethodException nsme) {
-            // do nothing, the exception means that there is no such constructor,
-            // so code will continue executing below
-        }
-
-        // constructor will be null if using connectin pool dao because the
-        // constructor has a different number and type of arguments
-        
-        if (constructor != null) {
-            // conn pool NOT used so constructor has these arguments
-            Object[] constructorArgs = new Object[]{
-                db, driverClass, url, username, password
-            };
-            authorDao = (AuthorDaoInterface) constructor.newInstance(constructorArgs);
-
-        } else {
-            /*
-             Here's what the connection pool version looks like. First
-             we lookup the JNDI name of the Glassfish connection pool
-             and then we use Java Refletion to create the needed
-             objects based on the servlet init params
-             */
-            Context ctx = new InitialContext();
-            //Context envCtx = (Context) ctx.lookup("java:comp/env");
-            DataSource ds = (DataSource) ctx.lookup(jndiName);
-            constructor = daoClass.getConstructor(new Class[]{
-                DataSource.class, DBAccessor.class
-            });
-            Object[] constructorArgs = new Object[]{
-                ds, db
-            };
-
-            authorDao = (AuthorDaoInterface) constructor
-                    .newInstance(constructorArgs);
-        }
-        
-        return new AuthorService(authorDao);
-    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -206,15 +122,7 @@ public class AuthorController extends HttpServlet {
     }
     
     @Override
-    public void init() throws ServletException {
-        driverClass = getServletContext().getInitParameter("db.driverClass");
-        url = getServletContext().getInitParameter("db.url");
-        username = getServletContext().getInitParameter("db.username");
-        password = getServletContext().getInitParameter("db.password");  
-        dbStrategyClassName = getServletContext().getInitParameter("dbStrategy");
-        daoClassName = getServletContext().getInitParameter("authorDao");
-        jndiName = getServletContext().getInitParameter("connPoolName");
-
+    public void init() throws ServletException {        
     }
     /**
      * Handles the HTTP <code>POST</code> method.
