@@ -5,6 +5,9 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -19,7 +22,7 @@
             Author Name: 
             <select id="authorName" name="authorName"> 
                 <c:forEach var="a" items="${authors}">
-                    <option value="${a.authorId}"><c:out value="${a.authorName}"</c:out></option>                                                                  
+                    <option value="${a.authorId}"><c:out value="${a.authorName}"/></option>                                                                  
                 </c:forEach>                                
             </select>               
             <input type="submit" name="submit" value="Submit">

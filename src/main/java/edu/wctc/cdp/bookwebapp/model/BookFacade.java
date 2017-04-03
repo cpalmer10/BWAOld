@@ -5,6 +5,7 @@
  */
 package edu.wctc.cdp.bookwebapp.model;
 
+import java.util.Date;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -37,11 +38,17 @@ public class BookFacade extends AbstractFacade<Book> {
         return q.executeUpdate();    
     }
     
-    public void addNew(String title, String isbn){//, Author authorEntity){
+    public void addNew(String title, String isbn, String authorName){        
         Book b = new Book();        
         b.setIsbn(isbn);
         b.setTitle(title);
-        //b.setAuthorEntity(authorEntity);
+        
+        Author authorEntity = new Author();
+        authorEntity.setAuthorName(authorName);
+        Date dateAdded = new Date();
+        authorEntity.setDateAdded(dateAdded);
+                        
+        b.setAuthorEntity(authorEntity);
         this.create(b);    
     }
     

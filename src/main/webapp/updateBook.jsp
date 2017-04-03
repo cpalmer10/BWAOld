@@ -20,7 +20,7 @@
                     <td>                        
                         <select id="bookUpdate" name="bookID"> 
                             <c:forEach var="b" items="${bookUpdate}">
-                                Title: <option value="${b.bookId}">${b.title}</option>                                                                  
+                                Title: <option value="${b.bookId}">${b.title}</option>                                                                     
                             </c:forEach>                                
                         </select>                            
                     </td>
@@ -29,12 +29,8 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>                        
-                        <select id="bookUpdate" name="bookID"> 
-                            <c:forEach var="b" items="${bookUpdate}">
-                                ISBN: <option value="${b.bookId}">${b.isbn}</option>                                                                  
-                            </c:forEach>                                
-                        </select>                            
+                    <td>                                               
+                        <input type="text" value="${b.isbn}" id="isbn">                                                                                                                                                                                                             
                     </td>
                     <td>
                         <input type="text" id="isbn" name="isbn">

@@ -77,9 +77,9 @@ public class BookController extends HttpServlet {
                 case ADD_ACTION:                    
                     String title = request.getParameter("title");
                     String bookIsbn = request.getParameter("isbn");
-                    //Author authorEntity = request.getParameter("authorEntity");
+                    String authorName = request.getParameter("authorName");                    
                     
-                    bookService.addNew(title, bookIsbn);//, authorEntity);
+                    bookService.addNew(title, bookIsbn, authorName);
                     destination = HOME_PAGE;                    
                     break;
                 case ADDSHOW_ACTION:
