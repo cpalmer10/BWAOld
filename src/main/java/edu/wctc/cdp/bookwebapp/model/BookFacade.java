@@ -47,6 +47,7 @@ public class BookFacade extends AbstractFacade<Book> {
         authorEntity.setAuthorName(authorName);
         Date dateAdded = new Date();
         authorEntity.setDateAdded(dateAdded);
+        
                         
         b.setAuthorEntity(authorEntity);
         this.create(b);    
