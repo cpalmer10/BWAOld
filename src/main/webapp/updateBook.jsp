@@ -10,6 +10,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="bookWebAppCSS.css" media="screen" /> 
         <title>Update Book</title>
     </head>
     <body>
@@ -19,25 +20,26 @@
                 <tr>
                     <td>                        
                         <select id="bookUpdate" name="bookID"> 
-                            <c:forEach var="b" items="${bookUpdate}">
-                                Title: <option value="${b.bookId}">${b.title}</option>                                                                     
+                            <c:forEach var="b" items="${bookUpdate}">                                                               
+                                <option value="${b.bookId}">${b.title}</option>                                                                     
                             </c:forEach>                                
                         </select>                            
                     </td>
                     <td>
-                        <input type="text" id="title" name="title">
+                        <input type="text" id="title" name="title" placeholder="Title">
                     </td>
                 </tr>
                 <tr>
-                    <td>                                               
-                        <input type="text" value="${b.isbn}" id="isbn">                                                                                                                                                                                                             
-                    </td>
-                    <td>
-                        <input type="text" id="isbn" name="isbn">
-                    </td>
+                    <td><input type="text" value="${b.isbn}" id="isbn1"></td>
+                    <td><input type="text" id="isbn" name="isbn" placeholder="ISBN"></td>
                     
                     
                 </tr>
+                <tr>
+                    <td><input type="text" value="${b.authorEntity.authorName}" id="authorName"></td>
+                    <td><input type="text" id="authorName" placeholder="Author Name"</td>
+                </tr>
+                
                     <td>
                         <input type="submit" name="update" value="Update">
                     </td>

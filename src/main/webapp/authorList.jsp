@@ -23,7 +23,13 @@
             <tr id="tableHeaders">
                 <th align="left">ID</th>
                 <th align="left">Author Name</th>
-                <th align="left">Date Added</th>               
+                <th align="left">Date Added</th>                  
+            <br>
+            <br>
+            <td><button value="Add" href="AuthorController?action=addShow"></button></td>
+                <td><a href="AuthorController?action=addShow">Add</a></td>
+                <td><a href="AuthorController?action=updateShow">Update</a></td>                
+                <td><a href="AuthorController?action=deleteShow">Delete</a></td>                
             </tr>
             
         <c:forEach var="a" items="${authors}" varStatus="rowCount">

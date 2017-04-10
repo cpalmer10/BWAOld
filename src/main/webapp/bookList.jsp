@@ -23,7 +23,12 @@
                 <th align="left">ID</th>
                 <th align="left">Book Title</th>
                 <th align="left">Book ISBN</th>
-                <th align="left">Author Name</th>
+                <th align="left">Author Name</th>                
+                <br>
+                <br>
+                <td><a href="BookController?action=addShow">Add</a></td>
+                <td><a href="BookController?action=updateShow">Update</a></td>                
+                <td><a href="BookController?action=deleteShow">Delete</a></td> 
             </tr>
             
         <c:forEach var="b" items="${books}" varStatus="rowCount">
