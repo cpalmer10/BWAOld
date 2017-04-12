@@ -13,5 +13,5 @@ public class ExceptionConstants {
     public static final String TABLENAME_NULL = "ERROR: No table was entered to execute the query.";
     public static final String MAXRECORDS_NULL = "ERROR: A maximum amount of records was not entered";
     public static final String SQL_EXCEPTION = "ERROR: SQL Exception.";
-    
+    public static final String BLAH_BLAH = "Blahblah";
 }
