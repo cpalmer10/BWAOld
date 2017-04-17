@@ -1,41 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
-    <!-- This is an example of an application-wide init
-    param. It's called a ServletContext init param. You can
-    have as many init params as you want but there is only one
-    servlet context object; remember, all of these params are
-    global to your app and can be accessed from any JSP page or
-    servlet. -->
-    <context-param>
-        <param-name>db.driverClass</param-name>
-        <param-value>com.mysql.jdbc.Driver</param-value>
-    </context-param>
-    <context-param>
-        <param-name>db.url</param-name>
-        <param-value>jdbc:mysql://localhost:3306/book</param-value>
-    </context-param>
-    <context-param>
-        <param-name>db.username</param-name>
-        <param-value>root</param-value>
-    </context-param>
-    <context-param>
-        <param-name>db.password</param-name>
-        <param-value>admin</param-value>
-    </context-param>
-    <context-param>
-        <param-name>connPoolName</param-name>
-        <param-value>jdbc/book</param-value>
-    </context-param>
-    <context-param>
-        <param-name>authorDao</param-name>
-        <param-value>edu.wctc.cdp.bookwebapp.model.ConnPoolAuthorDao</param-value>
-    </context-param>
-    <context-param>
-        <param-name>dbStrategy</param-name>
-        <param-value>edu.wctc.cdp.bookwebapp.db.accessor.MySqlDBAccessor</param-value>
-    </context-param>
 
+    <!-- Begin Spring-specific configuration -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:applicationContext.xml</param-value>
+    </context-param>
         
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+    </listener>
+    <!-- END Spring configuration -->
+
+
     <session-config>
         <session-timeout>
             30

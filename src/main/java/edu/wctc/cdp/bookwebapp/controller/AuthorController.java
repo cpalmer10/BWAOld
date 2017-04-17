@@ -5,7 +5,9 @@
  */
 package edu.wctc.cdp.bookwebapp.controller;
 
-import edu.wctc.cdp.bookwebapp.model.Author;
+import edu.wctc.cdp.bookwebapp.entity.Author;
+import edu.wctc.cdp.bookwebapp.entity.Book;
+import edu.wctc.cdp.bookwebapp.service.AuthorService;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,9 +15,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import edu.wctc.cdp.bookwebapp.model.AuthorFacade;
 import java.util.List;
-import javax.ejb.EJB;
+import javax.servlet.ServletContext;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  *
@@ -38,36 +41,38 @@ public class AuthorController extends HttpServlet {
     private static final String ADD_ACTION = "add";
     private static final String ADDSHOW_ACTION = "addShow";
     private static final String ACTION_PARAM = "action";
-    
-    @EJB
-    private AuthorFacade authorService;
+        
+    private AuthorService authorService;
   
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
         String destination = HOME_PAGE;
         String action = request.getParameter(ACTION_PARAM);  
-                                                                                           
-        try {           
+        Author author = null;
+        try {      
+           
            switch (action){
                 case LIST_ACTION:                    
                     List<Author> authors = authorService.findAll();
                     request.setAttribute("authors", authors);
                     destination = LIST_PAGE;
                     break;
-                case DELETE_ACTION:                                      
-                    authorService.deleteById(request.getParameter("authorID"));
+                case DELETE_ACTION:
+                    author = authorService.findByIdAndFetchBooksEagerly(request.getParameter("authorID"));
+                    authorService.remove(author);
+                            //);
                     destination = HOME_PAGE;
                     break;
                 case UPDATE_ACTION:
-                    String authorName = request.getParameter("author_name");                    
-                        // WTF DO I DO
-                    authorService.update(request.getParameter("authorID"), authorName);                    
+                    //String authorName = request.getParameter("author_name");                                            
+                    authorService.findById(request.getParameter("authorID"));                                               
                     destination = HOME_PAGE;
                     break;                
                 case ADD_ACTION:                    
                     String name = request.getParameter("author_name");                   
-                    authorService.add(name);
+                    authorService.edit(author);
+                            //name);
                     destination = HOME_PAGE;                    
                     break;
                 case ADDSHOW_ACTION:
@@ -116,7 +121,11 @@ public class AuthorController extends HttpServlet {
     }
     
     @Override
-    public void init() throws ServletException {        
+    public void init() throws ServletException {  
+        // Ask Spring for object to inject
+        ServletContext sctx = getServletContext();
+        WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(sctx);
+        AuthorService authorService = (AuthorService) ctx.getBean("authorService");
     }
     /**
      * Handles the HTTP <code>POST</code> method.

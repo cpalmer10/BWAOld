@@ -6,13 +6,12 @@
 package edu.wctc.cdp.bookwebapp.controller;
 
 
-import edu.wctc.cdp.bookwebapp.model.Author;
-import edu.wctc.cdp.bookwebapp.model.AuthorFacade;
-import edu.wctc.cdp.bookwebapp.model.Book;
-import edu.wctc.cdp.bookwebapp.model.BookFacade;
+import edu.wctc.cdp.bookwebapp.entity.Author;
+import edu.wctc.cdp.bookwebapp.entity.Book;
+import edu.wctc.cdp.bookwebapp.service.AuthorService;
+import edu.wctc.cdp.bookwebapp.service.BookService;
 import java.io.IOException;
 import java.util.List;
-import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -42,27 +41,28 @@ public class BookController extends HttpServlet {
     private static final String ADDSHOW_ACTION = "addShow";
     private static final String ACTION_PARAM = "action";
     
-    @EJB
-    private BookFacade bookService;
-    
-    @EJB
-    private AuthorFacade authorService;
+    private BookService bookService;
+
+    private AuthorService authorService;
   
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
         String destination = HOME_PAGE;
         String action = request.getParameter(ACTION_PARAM);  
-                                                                                           
-        try {           
+        Book book = null;                                                                                
+        try {   
+           
            switch (action){
                 case LIST_ACTION:
                     List<Book> books = bookService.findAll();
                     request.setAttribute("books", books);
                     destination = LIST_PAGE;
                     break;
-                case DELETE_ACTION:                                      
-                    bookService.deleteById(request.getParameter("bookID"));
+                case DELETE_ACTION:     
+                     
+                    bookService.remove(book);
+                            //request.getParameter("bookID"));
                     destination = HOME_PAGE;
                     break;
                 case UPDATE_ACTION:
@@ -70,7 +70,8 @@ public class BookController extends HttpServlet {
                     String bookTitle = request.getParameter("title");                    
                     String authorId = request.getParameter("authorId");
                         
-                    bookService.update(request.getParameter("bookId"), bookTitle, isbn, authorId);
+                    bookService.edit(book);
+                            //request.getParameter("bookId"), bookTitle, isbn, authorId);
                     
                     destination = HOME_PAGE;
                     break;                
@@ -79,7 +80,8 @@ public class BookController extends HttpServlet {
                     String bookIsbn = request.getParameter("isbn");
                     String authorName = request.getParameter("authorName");                    
                     
-                    bookService.addNew(title, bookIsbn, authorName);
+                    bookService.edit(book);
+                            //title, bookIsbn, authorName);
                     destination = HOME_PAGE;                    
                     break;
                 case ADDSHOW_ACTION:

@@ -1,9 +1,10 @@
-package edu.wctc.cdp.bookwebapp.model;
+package edu.wctc.cdp.bookwebapp.entity;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,10 +33,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Author.findByAuthorName", query = "SELECT a FROM Author a WHERE a.authorName = :authorName")
     , @NamedQuery(name = "Author.findByDateAdded", query = "SELECT a FROM Author a WHERE a.dateAdded = :dateAdded")})
 public class Author implements Serializable {
-
-    @OneToMany(mappedBy = "authorEntity")
-    private Set<Book> bookSet;
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,10 +45,13 @@ public class Author implements Serializable {
     @Column(name = "date_added")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateAdded;
+    @OneToMany(mappedBy = "authorEntity", cascade = CascadeType.ALL)
+    private Set<Book> bookSet;
 
     public Author() {
     }
 
+    
     public Author(Integer authorId) {
         this.authorId = authorId;
     }
@@ -79,6 +79,16 @@ public class Author implements Serializable {
     public void setDateAdded(Date dateAdded) {
         this.dateAdded = dateAdded;
     }
+    
+    @XmlTransient
+    public Set<Book> getBookSet() {
+        return bookSet;
+    }
+
+    public void setBookSet(Set<Book> bookSet) {
+        this.bookSet = bookSet;
+    }
+    
 
     @Override
     public int hashCode() {
@@ -105,13 +115,4 @@ public class Author implements Serializable {
         return "edu.wctc.cdp.bookwebapp.model.Author[ authorId=" + authorId + " ]";
     }
 
-    @XmlTransient
-    public Set<Book> getBookSet() {
-        return bookSet;
-    }
-
-    public void setBookSet(Set<Book> bookSet) {
-        this.bookSet = bookSet;
-    }
-    
 }
