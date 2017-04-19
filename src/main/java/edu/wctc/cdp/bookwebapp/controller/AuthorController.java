@@ -6,7 +6,6 @@
 package edu.wctc.cdp.bookwebapp.controller;
 
 import edu.wctc.cdp.bookwebapp.entity.Author;
-import edu.wctc.cdp.bookwebapp.entity.Book;
 import edu.wctc.cdp.bookwebapp.service.AuthorService;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
@@ -41,8 +40,9 @@ public class AuthorController extends HttpServlet {
     private static final String ADD_ACTION = "add";
     private static final String ADDSHOW_ACTION = "addShow";
     private static final String ACTION_PARAM = "action";
+    private static final long serialVersionUID = 494044029201740039L;
         
-    private AuthorService authorService;
+    private AuthorService authorService ;
   
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -53,7 +53,8 @@ public class AuthorController extends HttpServlet {
         try {      
            
            switch (action){
-                case LIST_ACTION:                    
+                case LIST_ACTION: 
+                    
                     List<Author> authors = authorService.findAll();
                     request.setAttribute("authors", authors);
                     destination = LIST_PAGE;
@@ -125,7 +126,7 @@ public class AuthorController extends HttpServlet {
         // Ask Spring for object to inject
         ServletContext sctx = getServletContext();
         WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(sctx);
-        AuthorService authorService = (AuthorService) ctx.getBean("authorService");
+        authorService = (AuthorService) ctx.getBean("authorService");
     }
     /**
      * Handles the HTTP <code>POST</code> method.
